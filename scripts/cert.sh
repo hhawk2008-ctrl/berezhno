@@ -4,15 +4,18 @@
 # Скрипт сам добавляет еженедельный автозапуск (cron), поэтому продлевать вручную не нужно.
 # Запуск из папки проекта: bash scripts/cert.sh
 set -euo pipefail
+trap 'echo "cert.sh: ошибка в строке $LINENO" >&2' ERR
 
 cd "$(dirname "$0")/.."
 project_dir="$PWD"
 
-env_value() { grep "^$1=" .env | head -1 | cut -d= -f2-; }
+# Если строки в .env нет, возвращаем пустое значение, а не ошибку.
+env_value() { grep "^$1=" .env | head -1 | cut -d= -f2- || true; }
 
 domain="$(env_value SITE_DOMAIN)"
 email="$(env_value ACME_EMAIL)"
 email="${email:-privet@${domain}}"
+echo "Сертификат для ${domain}: проверяю."
 
 if [ -z "$(env_value REGRU_USERNAME)" ] || [ -z "$(env_value REGRU_PASSWORD)" ]; then
   echo "В файле .env не заполнены REGRU_USERNAME и REGRU_PASSWORD — см. шаг 15 инструкции." >&2
