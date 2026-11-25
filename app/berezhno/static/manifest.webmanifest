@@ -1,0 +1,13 @@
+{
+  "name": "Бережно",
+  "short_name": "Бережно",
+  "description": "Помощник на пути к цели — без гонки и упрёков",
+  "lang": "ru",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f3ee",
+  "theme_color": "#f7f3ee",
+  "icons": [
+    { "src": "/static/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

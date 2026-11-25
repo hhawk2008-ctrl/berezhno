@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f3ee">
+  <title>{% block title %}Бережно{% endblock %}</title>
+  <meta name="description" content="Бережно — помощник на пути к цели, без гонки и упрёков.">
+  <link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/static/manifest.webmanifest">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="page">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer">
+    <p>Бережно · steady-me.ru</p>
+    <p class="muted">Сервис самопомощи. Он не заменяет психотерапию и помощь врача.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Первая установка «Бережно» на сервер.
+# Запуск из папки проекта: bash scripts/install.sh
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+echo "== 1/4. Устанавливаю Docker =="
+sudo apt-get update -y
+sudo apt-get install -y docker.io docker-compose-v2 git openssl curl
+sudo systemctl enable --now docker
+
+# Зеркало Docker Hub: если основной сервер недоступен, образы скачаются с зеркала.
+if [ ! -f /etc/docker/daemon.json ]; then
+  echo '{ "registry-mirrors": ["https://mirror.gcr.io"] }' | sudo tee /etc/docker/daemon.json >/dev/null
+  sudo systemctl restart docker
+fi
+
+echo "== 2/4. Готовлю настройки (.env) =="
+if [ ! -f .env ]; then
+  cp .env.example .env
+  password="$(openssl rand -hex 24)"
+  sed -i "s/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=${password}/" .env
+  chmod 600 .env
+  echo "Файл .env создан, пароль базы данных придуман автоматически."
+else
+  echo "Файл .env уже есть — оставляю как есть."
+fi
+
+domain="$(grep '^SITE_DOMAIN=' .env | cut -d= -f2)"
+
+echo "== 3/4. Собираю и запускаю сервис (первый раз займёт 3–5 минут) =="
+sudo docker compose up -d --build
+
+echo "== 4/4. Проверяю, что сайт отвечает =="
+for i in $(seq 1 12); do
+  if curl -fsS --max-time 10 "https://${domain}/healthz" >/dev/null 2>&1; then
+    echo
+    echo "Готово: https://${domain} работает."
+    exit 0
+  fi
+  sleep 10
+done
+
+echo
+echo "Сервис запущен, но сайт пока не ответил по https://${domain}."
+echo "Чаще всего это значит, что сертификат ещё получается — подождите 5 минут и откройте сайт в браузере."
+echo "Если не откроется, пришлите вывод команды:  sudo docker compose logs --tail=50"
