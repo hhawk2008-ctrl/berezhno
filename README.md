@@ -10,7 +10,7 @@
 | --- | --- |
 | `app/` | Приложение: FastAPI, страницы на Jinja2 |
 | `docker-compose.yml` | Запуск всего сразу: приложение, база PostgreSQL, Caddy |
-| `Caddyfile` | Caddy принимает запросы на steady-me.ru и сам получает сертификат https |
+| `Caddyfile` | Caddy принимает запросы на steady-me.ru и отдаёт сайт по https (сертификат скачивает scripts/cert.sh из Yandex Certificate Manager) |
 | `scripts/install.sh` | Первая установка на сервер |
 | `scripts/update.sh` | Обновление до последней версии одной командой |
 
