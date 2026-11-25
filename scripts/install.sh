@@ -5,7 +5,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-echo "== 1/4. Устанавливаю Docker =="
+echo "== 1/5. Устанавливаю Docker =="
 sudo apt-get update -y
 sudo apt-get install -y docker.io docker-compose-v2 git openssl curl
 sudo systemctl enable --now docker
@@ -16,7 +16,7 @@ if [ ! -f /etc/docker/daemon.json ] || grep -q "mirror.gcr.io" /etc/docker/daemo
   sudo systemctl restart docker
 fi
 
-echo "== 2/4. Готовлю настройки (.env) =="
+echo "== 2/5. Готовлю настройки (.env) =="
 if [ ! -f .env ]; then
   cp .env.example .env
   password="$(openssl rand -hex 24)"
@@ -29,10 +29,13 @@ fi
 
 domain="$(grep '^SITE_DOMAIN=' .env | cut -d= -f2)"
 
-echo "== 3/4. Собираю и запускаю сервис (первый раз займёт 3–5 минут) =="
+echo "== 3/5. Сертификат https =="
+bash scripts/cert.sh
+
+echo "== 4/5. Собираю и запускаю сервис (первый раз займёт 3–5 минут) =="
 sudo docker compose up -d --build
 
-echo "== 4/4. Проверяю, что сайт отвечает =="
+echo "== 5/5. Проверяю, что сайт отвечает =="
 for i in $(seq 1 12); do
   if curl -fsS --max-time 10 "https://${domain}/healthz" >/dev/null 2>&1; then
     echo
@@ -44,5 +47,5 @@ done
 
 echo
 echo "Сервис запущен, но сайт пока не ответил по https://${domain}."
-echo "Чаще всего это значит, что сертификат ещё получается — подождите 5 минут и откройте сайт в браузере."
+echo "Подождите минуту и откройте сайт в браузере."
 echo "Если не откроется, пришлите вывод команды:  sudo docker compose logs --tail=50"

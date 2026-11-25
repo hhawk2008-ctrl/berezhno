@@ -1,12 +1,16 @@
-{
-	email {$ACME_EMAIL}
+# Сертификат https получает скрипт scripts/cert.sh (Let's Encrypt, проверка через DNS в REG.RU).
+# Caddy только берёт готовые файлы из папки certs.
+(tls_files) {
+	tls /certs/certificates/{$SITE_DOMAIN}.crt /certs/certificates/{$SITE_DOMAIN}.key
 }
 
 {$SITE_DOMAIN} {
+	import tls_files
 	encode gzip
 	reverse_proxy app:8000
 }
 
 www.{$SITE_DOMAIN} {
+	import tls_files
 	redir https://{$SITE_DOMAIN}{uri} permanent
 }
