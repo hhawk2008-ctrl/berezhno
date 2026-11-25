@@ -19,8 +19,16 @@ class Settings(BaseSettings):
     mail_from_name: str = "Бережно"
     mail_from_address: str = "privet@steady-me.ru"
 
+    # YandexGPT: доступ по IAM-токену сервисного аккаунта ВМ (роль ai.languageModels.user).
+    # ai_mode: yandex — настоящие запросы, off — без ИИ (план заполняется вручную).
+    ai_mode: str = "yandex"
     yandex_folder_id: str = ""
+    yandex_gpt_model: str = "yandexgpt/latest"
     yandex_api_key: str = ""
+
+    @property
+    def folder_id(self) -> str:
+        return self.yandex_folder_id or "b1gd8bc5v97j2km03itf"
 
 
 @lru_cache

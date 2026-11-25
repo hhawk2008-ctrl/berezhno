@@ -29,6 +29,7 @@ body {
 h1 { font-size: 34px; line-height: 1.15; margin: 12px 0 8px; }
 h2 { font-size: 22px; margin: 32px 0 12px; }
 p { margin: 0 0 12px; }
+a { color: var(--accent); }
 
 .hero { text-align: center; margin-bottom: 24px; }
 .hero__icon { display: block; margin: 0 auto; }
@@ -104,3 +105,48 @@ p { margin: 0 0 12px; }
 }
 
 .notice { background: var(--soft); border-radius: 12px; padding: 12px 14px; }
+
+textarea {
+  width: 100%;
+  font: inherit;
+  padding: 12px 14px;
+  border: 1px solid #d9d1c8;
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--text);
+  resize: vertical;
+}
+textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+.form textarea, .form input { margin-bottom: 14px; }
+.form__group { border: 0; padding: 0; margin: 8px 0 6px; }
+.form__group legend { font-weight: 600; margin-bottom: 6px; padding: 0; }
+.form__row { display: flex; gap: 12px; }
+.form__row label { flex: 1; font-weight: 400; font-size: 15px; }
+.form .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; margin: 12px 0; }
+.form .check input { width: 20px; height: 20px; margin: 3px 0 0; flex: none; accent-color: var(--accent); }
+
+.nav { display: flex; gap: 18px; margin: -12px 0 20px; font-size: 15px; flex-wrap: wrap; }
+.nav a { color: var(--muted); text-decoration: none; }
+.nav a[aria-current="page"] { color: var(--text); font-weight: 600; }
+.nav__help { margin-left: auto; }
+
+.progress { color: var(--muted); font-size: 14px; margin: 0; }
+.thought { font-style: italic; color: var(--muted); }
+.label { display: block; color: var(--muted); font-size: 14px; margin-bottom: 4px; }
+.step-title { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+.card--left { text-align: left; }
+.center { text-align: center; }
+.button--soft { background: var(--soft); color: var(--text); }
+.checkin .button { margin-top: 10px; }
+.checkin + p { margin: 14px 0 0; }
+
+.energy { display: flex; gap: 8px; }
+.energy button {
+  flex: 1; padding: 12px 0; border: 1px solid #d9d1c8; border-radius: 12px; background: var(--card);
+  font: inherit; font-weight: 600; cursor: pointer; color: var(--text);
+}
+.energy button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.evidence { list-style: none; padding: 0; }
+.evidence li { background: var(--card); border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; }
+.phone { font-size: 20px; font-weight: 600; color: var(--accent); }

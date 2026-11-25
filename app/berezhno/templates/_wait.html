@@ -1,0 +1,8 @@
+<script>
+  document.querySelectorAll("form[data-wait]").forEach(function (form) {
+    form.addEventListener("submit", function () {
+      var button = form.querySelector("button[type=submit]");
+      if (button) { button.disabled = true; button.textContent = form.dataset.wait; }
+    });
+  });
+</script>

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Моя цель · Бережно{% endblock %}
+{% block content %}
+{% set active = 'goal' %}{% include "_nav.html" %}
+<h1>Моя цель</h1>
+<section class="card">
+  <p class="step-title">{{ goal.title }}</p>
+  {% for text, answer in answers %}
+  <p class="muted"><span class="label">{{ text }}</span><br>{{ answer }}</p>
+  {% endfor %}
+</section>
+<h2>Этапы</h2>
+<ol class="steps">
+  {% for stage in stages %}<li>{{ stage.title }}</li>{% endfor %}
+</ol>
+<p class="muted">Скоро здесь можно будет менять план, ставить цель на паузу и отмечать пройденные этапы.</p>
+{% endblock %}

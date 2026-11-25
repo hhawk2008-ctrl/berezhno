@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Знакомство · Бережно{% endblock %}
+{% block content %}
+<h1>Давайте познакомимся</h1>
+<p>Пара вопросов, чтобы сервис подстроился под вас. Всё это потом можно поменять.</p>
+
+<form class="form" method="post" action="/welcome">
+  <label for="name">Как к вам обращаться?</label>
+  <input id="name" name="name" type="text" autocomplete="given-name" maxlength="60" value="{{ user.name or '' }}"
+         placeholder="Например, Ольга">
+
+  <fieldset class="form__group">
+    <legend>Когда присылать напоминания</legend>
+    <p class="muted">Утром — шаг на сегодня, вечером — короткий вопрос, как он прошёл.</p>
+    <div class="form__row">
+      <label>Утром
+        <input name="morning" type="time" value="08:30" required>
+      </label>
+      <label>Вечером
+        <input name="evening" type="time" value="21:30" required>
+      </label>
+    </div>
+  </fieldset>
+  <input type="hidden" name="tz" id="tz" value="Europe/Moscow">
+
+  <label class="check">
+    <input type="checkbox" name="selfhelp" value="1" required>
+    <span>Понимаю, что «Бережно» — сервис самопомощи. Он не заменяет психотерапию и помощь врача.</span>
+  </label>
+  <label class="check">
+    <input type="checkbox" name="pd" value="1" required>
+    <span>Даю согласие на обработку персональных данных по <a href="/privacy-policy" target="_blank">политике</a>.</span>
+  </label>
+
+  {% if error %}<p class="form__error" role="alert">{{ error }}</p>{% endif %}
+  <button class="button" type="submit">Дальше — к цели</button>
+</form>
+<script>
+  try { document.getElementById("tz").value = Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Moscow"; } catch (e) {}
+</script>
+{% endblock %}

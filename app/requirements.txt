@@ -6,3 +6,4 @@ asyncpg==0.32.0
 pydantic-settings==2.16.3
 httpx==0.28.1
 python-multipart==0.0.20
+tzdata==2025.2

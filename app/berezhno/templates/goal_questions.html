@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Пара вопросов · Бережно{% endblock %}
+{% block content %}
+<p class="progress">Шаг 2 из 3</p>
+<h1>Пара уточнений</h1>
+<p>Ваша цель: <strong>{{ goal.title }}</strong></p>
+<p class="muted">Отвечайте коротко, как есть. Если на вопрос нечего сказать, пропустите его.</p>
+
+<form class="form" method="post" action="/goal/new/questions" data-wait="Составляю план, это займёт до 20 секунд…">
+  {% for key, text in questions %}
+  <label for="{{ key }}">{{ text }}</label>
+  <textarea id="{{ key }}" name="{{ key }}" rows="2" maxlength="500">{{ answers.get(key, '') }}</textarea>
+  {% endfor %}
+  <button class="button" type="submit">Составить план</button>
+</form>
+<p><a class="back" href="/goal/new">← Изменить цель</a></p>
+{% include "_wait.html" %}
+{% endblock %}

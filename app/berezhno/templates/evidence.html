@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Моя копилка · Бережно{% endblock %}
+{% block content %}
+{% set active = 'evidence' %}{% include "_nav.html" %}
+<h1>Моя копилка</h1>
+<p class="muted">Всё, что уже получилось. Сюда полезно заглядывать в дни, когда кажется, что ничего не выходит.</p>
+{% if items %}
+<ul class="evidence">
+  {% for item, day in items %}
+  <li><span class="label">{{ day|ru_date }}</span>{{ item.text }}</li>
+  {% endfor %}
+</ul>
+{% else %}
+<section class="card card--soft"><p>Пока пусто. Первый сделанный шаг появится здесь.</p></section>
+{% endif %}
+{% endblock %}

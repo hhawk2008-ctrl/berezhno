@@ -1,15 +1,64 @@
 {% extends "base.html" %}
 {% block title %}Сегодня · Бережно{% endblock %}
 {% block content %}
-<h1>Сегодня</h1>
+{% set active = 'today' %}{% include "_nav.html" %}
+<h1>{% if user.name %}{{ user.name }}, сегодня{% else %}Сегодня{% endif %}</h1>
+<p class="thought">{{ thought }}</p>
+
+{% if result == 'done' %}
+<p class="notice">Записано в копилку.
+  {% if total_steps == 1 %}Первый шаг — это уже много.{% else %}Это {{ week_steps }}-й шаг за неделю.{% endif %}</p>
+{% elif result == 'partial' %}
+<p class="notice">Засчитано. Шаг на завтра можно оставить таким же или уменьшить.</p>
+{% elif result == 'not_done' %}
+<p class="notice">Сегодня не получилось — так бывает. Скоро здесь появится короткий разбор: что помешало
+  и какой шаг точно получится. А пока можно выбрать шаг поменьше.</p>
+{% endif %}
+
 <section class="card">
-  <p>Здравствуйте! Вы вошли в «Бережно».</p>
-  <p class="muted">Скоро здесь появится ваш день: цель, один небольшой шаг на сегодня
-    и копилка того, что уже получилось. Мы как раз это собираем.</p>
+  {% if state == 'planned' or state == 'overdue' %}
+    {% if state == 'overdue' %}
+    <p class="muted">Шаг от {{ step.day|ru_date }} остался без отметки, ничего страшного. Отметим?</p>
+    {% else %}
+    <p class="label">Шаг на сегодня · {{ step.minutes }} минут</p>
+    {% endif %}
+    <p class="step-title">{{ step.title }}</p>
+    {% if step.if_then %}<p class="muted">{{ step.if_then }}</p>{% endif %}
+    <p class="label">Как прошло?</p>
+    <form class="checkin" method="post" action="/today/checkin">
+      <input type="hidden" name="step_id" value="{{ step.id }}">
+      <button class="button" name="result" value="done" type="submit">Сделано</button>
+      <button class="button button--soft" name="result" value="partial" type="submit">Частично</button>
+      <button class="button button--soft" name="result" value="not_done" type="submit">Не получилось</button>
+    </form>
+    {% if state == 'planned' %}<p><a href="/step/next">Изменить или уменьшить шаг</a></p>{% endif %}
+  {% elif state == 'upcoming' %}
+    <p class="label">Шаг на {{ step.day|ru_date }} · {{ step.minutes }} минут</p>
+    <p class="step-title">{{ step.title }}</p>
+    {% if step.if_then %}<p class="muted">{{ step.if_then }}</p>{% endif %}
+    <p><a href="/step/next">Изменить шаг</a></p>
+  {% elif state == 'checked' %}
+    <p class="label">Шаг на сегодня отмечен</p>
+    <p class="step-title">{{ step.title }}</p>
+    <a class="button" href="/step/next">Выбрать шаг на завтра</a>
+  {% else %}
+    <p>Шаг на сегодня ещё не выбран.</p>
+    <a class="button" href="/step/next">Выбрать шаг</a>
+  {% endif %}
 </section>
 
-<form method="post" action="/logout">
-  <p class="muted">Вы вошли как {{ user.email }}.</p>
-  <button class="link-button" type="submit">Выйти</button>
+<section class="card">
+  <p class="label">Сколько у вас сегодня сил? Честно, без оценок</p>
+  <form class="energy" method="post" action="/today/energy">
+    {% for v in range(1, 6) %}
+    <button type="submit" name="value" value="{{ v }}"{% if energy == v %} aria-pressed="true"{% endif %}>{{ v }}</button>
+    {% endfor %}
+  </form>
+</section>
+
+<p class="muted center">Дней с шагом за неделю: {{ week_days }} из 7</p>
+
+<form method="post" action="/logout" class="center">
+  <button class="link-button muted" type="submit">Выйти</button>
 </form>
 {% endblock %}

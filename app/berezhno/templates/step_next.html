@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Шаг · Бережно{% endblock %}
+{% block content %}
+{% set active = 'today' %}{% include "_nav.html" %}
+<h1>{% if is_today %}Шаг на сегодня{% else %}Шаг на {{ day|ru_date }}{% endif %}</h1>
+{% if suggest_half %}
+<p class="notice">Предлагаю шаг вдвое меньше: так он почти наверняка получится. Можно поменять как угодно.</p>
+{% elif last and not editing %}
+<p class="muted">Можно оставить прошлый шаг, уменьшить его или придумать новый.</p>
+{% endif %}
+
+<form class="form" method="post" action="/step/next">
+  <label for="title">Что делаем</label>
+  <input id="title" name="title" type="text" maxlength="200" value="{{ title }}" required>
+  <label for="minutes">Сколько минут</label>
+  <input id="minutes" name="minutes" type="number" min="5" max="120" value="{{ minutes }}">
+  <label for="if_then">План «если — то»</label>
+  <textarea id="if_then" name="if_then" rows="2" maxlength="300">{{ if_then }}</textarea>
+  <button class="button" type="submit" name="action" value="save">Сохранить шаг</button>
+  <button class="button button--soft" type="submit" name="action" value="half">Сделать вдвое меньше</button>
+</form>
+<p class="muted">Цель: {{ goal.title }}</p>
+{% endblock %}

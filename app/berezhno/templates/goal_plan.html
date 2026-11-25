@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}План · Бережно{% endblock %}
+{% block content %}
+<p class="progress">Шаг 3 из 3</p>
+<h1>Ваш план</h1>
+<p>Цель: <strong>{{ goal.title }}</strong></p>
+{% if manual %}
+<section class="card card--soft card--left">
+  <p>Помощник сейчас не ответил, поэтому план можно набросать самостоятельно — пара строк, не больше.</p>
+  <form method="post" action="/goal/new/replan" data-wait="Составляю план…">
+    <button class="link-button" type="submit">Попробовать ещё раз с помощником</button>
+  </form>
+</section>
+{% else %}
+<p class="muted">Это черновик. Поправьте всё, что не подходит: вы знаете свою жизнь лучше.</p>
+{% endif %}
+
+<form class="form" method="post" action="/goal/new/plan">
+  <fieldset class="form__group">
+    <legend>Этапы</legend>
+    {% for stage in stages %}
+    <input name="stage{{ loop.index0 }}" type="text" maxlength="200" value="{{ stage }}"
+           placeholder="{% if loop.first %}Первый этап{% else %}Ещё этап, если нужен{% endif %}"
+           aria-label="Этап {{ loop.index }}">
+    {% endfor %}
+  </fieldset>
+
+  <fieldset class="form__group">
+    <legend>Первый шаг</legend>
+    <p class="muted">Маленький и конкретный, на 10–15 минут. Такой, чтобы хотелось сказать: «ну это-то я могу».</p>
+    <input name="step_title" type="text" maxlength="200" value="{{ step.get('title', '') }}" required
+           aria-label="Первый шаг" placeholder="Например: открыть курс и посмотреть, где остановилась">
+    <label for="step_minutes">Сколько минут</label>
+    <input id="step_minutes" name="step_minutes" type="number" min="5" max="120" value="{{ step.get('minutes', 15) }}">
+  </fieldset>
+
+  <label for="if_then">План «если — то»</label>
+  <p class="muted">Заранее решаем, когда и где сделаем шаг. Так его проще не забыть.</p>
+  <textarea id="if_then" name="if_then" rows="2" maxlength="300"
+            placeholder="Если сегодня в 21:00 я дома, то сразу открываю курс, до телефона">{{ if_then }}</textarea>
+
+  {% if error %}<p class="form__error" role="alert">{{ error }}</p>{% endif %}
+  <button class="button" type="submit">Всё верно, начинаем</button>
+</form>
+{% include "_wait.html" %}
+{% endblock %}

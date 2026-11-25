@@ -1,0 +1,6 @@
+<nav class="nav">
+  <a href="/today"{% if active == 'today' %} aria-current="page"{% endif %}>Сегодня</a>
+  <a href="/goal"{% if active == 'goal' %} aria-current="page"{% endif %}>Цель</a>
+  <a href="/evidence"{% if active == 'evidence' %} aria-current="page"{% endif %}>Копилка</a>
+  <a href="/help-now" class="nav__help">Помощь</a>
+</nav>

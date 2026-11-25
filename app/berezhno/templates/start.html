@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Готово · Бережно{% endblock %}
+{% block content %}
+<h1>Готово{% if user.name %}, {{ user.name }}{% endif %}</h1>
+<section class="card">
+  {% if is_today %}
+  <p>Сегодня — один шаг на {{ step.minutes }} минут:</p>
+  {% else %}
+  <p>Сегодня уже вечер, поэтому первый шаг — на завтра, {{ step.minutes }} минут:</p>
+  {% endif %}
+  <p class="step-title">{{ step.title }}</p>
+  {% if step.if_then %}<p class="muted">{{ step.if_then }}</p>{% endif %}
+</section>
+<p>Вечером спрошу, как прошло. Если не получится, разберёмся вместе, без упрёков.</p>
+<p class="muted">Скоро напоминания можно будет получать в MAX и ВКонтакте. Пока заглядывайте сюда сами —
+  удобнее всего добавить сайт на главный экран телефона.</p>
+<a class="button" href="/today">К шагу на сегодня</a>
+{% endblock %}

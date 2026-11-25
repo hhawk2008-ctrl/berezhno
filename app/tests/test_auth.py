@@ -47,7 +47,7 @@ def test_full_login_flow(client):
 
     r = client.post("/login/code", data={"code": f"{code[:3]} {code[3:]}"}, follow_redirects=False)
     assert r.status_code == 303 and r.headers["location"] == "/today"
-    assert "anna@example.ru" in client.get("/today").text
+    assert client.get("/today", follow_redirects=False).headers["location"] == "/welcome"
     assert client.get("/login", follow_redirects=False).headers["location"] == "/today"
     assert "Перейти к своему дню" in client.get("/").text
 
@@ -134,8 +134,8 @@ def test_mail_failure(client, monkeypatch):
 
 
 def test_migrations_are_idempotent(client):
-    from berezhno.db import run_migrations
+    from berezhno.db import MIGRATIONS_DIR, run_migrations
 
     client.portal.call(run_migrations)  # тот же цикл событий, что у приложения
-    assert psql("SELECT count(*) FROM schema_migrations") == "1"
+    assert psql("SELECT count(*) FROM schema_migrations") == str(len(list(MIGRATIONS_DIR.glob("*.sql"))))
     assert client.get("/healthz").status_code == 200

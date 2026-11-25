@@ -13,6 +13,7 @@ os.environ.update({
     "COOKIE_SECURE": "false",
     "SECRET_KEY": "test-secret",
     "SITE_DOMAIN": "testserver",
+    "AI_MODE": "off",
 })
 
 

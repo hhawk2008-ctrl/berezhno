@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Ваша цель · Бережно{% endblock %}
+{% block content %}
+<p class="progress">Шаг 1 из 3</p>
+<h1>Какая у вас цель?</h1>
+<p>Напишите своими словами, как рассказали бы другу. Неважно, большая она или маленькая.</p>
+
+{% if forbidden %}
+<section class="card card--soft card--left">
+  <p>{{ forbidden }}</p>
+  <p><a href="mailto:privet@steady-me.ru">Написать нам</a></p>
+</section>
+{% endif %}
+
+<form class="form" method="post" action="/goal/new">
+  <label for="title">Цель</label>
+  <textarea id="title" name="title" rows="3" maxlength="300" required
+            placeholder="Например: хочу наконец пройти курс по Excel, который купила год назад">{{ title }}</textarea>
+  {% if error %}<p class="form__error" role="alert">{{ error }}</p>{% endif %}
+  <button class="button" type="submit">Дальше</button>
+</form>
+{% endblock %}

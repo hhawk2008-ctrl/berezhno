@@ -4,11 +4,12 @@ from contextlib import asynccontextmanager
 from urllib.parse import urlsplit
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse, Response
+from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
 from .auth import current_user
 from .auth import router as auth_router
+from .pages import router as pages_router
 from .config import get_settings
 from .db import check_db, run_migrations
 from .web import BASE_DIR, templates
@@ -31,6 +32,7 @@ async def lifespan(_: FastAPI):
 app = FastAPI(title="Бережно", docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 app.include_router(auth_router)
+app.include_router(pages_router)
 
 
 @app.middleware("http")
@@ -49,14 +51,6 @@ async def same_origin_only(request: Request, call_next):
 async def landing(request: Request) -> HTMLResponse:
     user = await current_user(request)
     return templates.TemplateResponse(request, "landing.html", {"user": user})
-
-
-@app.get("/today", response_class=HTMLResponse)
-async def today(request: Request) -> Response:
-    user = await current_user(request)
-    if user is None:
-        return RedirectResponse("/login", status_code=303)
-    return templates.TemplateResponse(request, "today.html", {"user": user})
 
 
 @app.get("/healthz")
