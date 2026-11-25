@@ -37,8 +37,11 @@ else
   echo "Проверка через DNS может занять от 2 до 30 минут — не закрывайте окно."
 fi
 
-sudo docker run --rm \
+# GODEBUG=tlsmlkem=0 — короткое приветствие TLS без постквантового ключа:
+# с длинным на части адресов из облака соединение зависает (TLS handshake timeout).
+sudo docker run --rm --network host \
   --env-file .env \
+  -e GODEBUG=tlsmlkem=0 \
   -e REGRU_PROPAGATION_TIMEOUT=1800 \
   -e REGRU_POLLING_INTERVAL=30 \
   -v "${project_dir}/certs:/data" \
