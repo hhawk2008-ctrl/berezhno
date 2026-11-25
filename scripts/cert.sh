@@ -4,6 +4,7 @@
 # Скрипт сам добавляет еженедельный автозапуск (cron), поэтому продлевать вручную не нужно.
 # Запуск из папки проекта: bash scripts/cert.sh
 set -euo pipefail
+# Версия lego закреплена: в lego 5 другие параметры запуска.
 trap 'echo "cert.sh: ошибка в строке $LINENO" >&2' ERR
 
 cd "$(dirname "$0")/.."
@@ -41,7 +42,7 @@ sudo docker run --rm \
   -e REGRU_PROPAGATION_TIMEOUT=1800 \
   -e REGRU_POLLING_INTERVAL=30 \
   -v "${project_dir}/certs:/data" \
-  goacme/lego:latest \
+  goacme/lego:v4.35.2 \
   --accept-tos --email "$email" --dns regru \
   --domains "$domain" --domains "www.${domain}" \
   --path /data "${action[@]}"
