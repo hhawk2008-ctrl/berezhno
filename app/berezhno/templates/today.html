@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Сегодня · Бережно{% endblock %}
+{% block content %}
+<h1>Сегодня</h1>
+<section class="card">
+  <p>Здравствуйте! Вы вошли в «Бережно».</p>
+  <p class="muted">Скоро здесь появится ваш день: цель, один небольшой шаг на сегодня
+    и копилка того, что уже получилось. Мы как раз это собираем.</p>
+</section>
+
+<form method="post" action="/logout">
+  <p class="muted">Вы вошли как {{ user.email }}.</p>
+  <button class="link-button" type="submit">Выйти</button>
+</form>
+{% endblock %}

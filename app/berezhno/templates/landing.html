@@ -41,5 +41,10 @@
 <section class="card card--soft">
   <p class="soon">Мы готовимся к открытию.</p>
   <p class="muted">Скоро здесь можно будет поставить свою первую цель.</p>
+  {% if user %}
+  <a class="button" href="/today">Перейти к своему дню</a>
+  {% else %}
+  <a class="button" href="/login">Войти</a>
+  {% endif %}
 </section>
 {% endblock %}

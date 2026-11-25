@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Код из письма · Бережно{% endblock %}
+{% block content %}
+<a class="back" href="/login">← Указать другую почту</a>
+<h1>Проверьте почту</h1>
+<p>Мы отправили код на <strong>{{ email }}</strong>. Письмо обычно приходит в течение минуты.
+  Если его нет, загляните в папку «Спам».</p>
+{% if notice %}<p class="notice">{{ notice }}</p>{% endif %}
+
+<form class="form" method="post" action="/login/code">
+  <label for="code">Код из письма</label>
+  <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code"
+         maxlength="12" required autofocus>
+  {% if error %}<p class="form__error" role="alert">{{ error }}</p>{% endif %}
+  <button class="button" type="submit">Войти</button>
+</form>
+
+<form method="post" action="/login">
+  <input type="hidden" name="email" value="{{ email }}">
+  <button class="link-button" type="submit">Прислать новый код</button>
+</form>
+{% endblock %}

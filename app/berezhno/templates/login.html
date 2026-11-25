@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Вход · Бережно{% endblock %}
+{% block content %}
+<a class="back" href="/">← Бережно</a>
+<h1>Вход</h1>
+<p>Введите почту, и мы пришлём на неё код. Пароль придумывать не нужно.</p>
+
+<form class="form" method="post" action="/login">
+  <label for="email">Ваша почта</label>
+  <input id="email" name="email" type="email" autocomplete="email" inputmode="email"
+         value="{{ email }}" required autofocus>
+  {% if error %}<p class="form__error" role="alert">{{ error }}</p>{% endif %}
+  <button class="button" type="submit">Получить код</button>
+</form>
+
+<p class="muted">Если вы здесь впервые, аккаунт появится сам, как только вы введёте код из письма.</p>
+{% endblock %}

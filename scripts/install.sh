@@ -27,6 +27,13 @@ else
   echo "Файл .env уже есть — оставляю как есть."
 fi
 
+# Секретный ключ для входа: если его нет в .env, придумываем.
+if ! grep -q '^SECRET_KEY=.' .env; then
+  sed -i '/^SECRET_KEY=/d' .env
+  echo "SECRET_KEY=$(openssl rand -hex 32)" >> .env
+  echo "Секретный ключ для входа добавлен в .env."
+fi
+
 domain="$(grep '^SITE_DOMAIN=' .env | cut -d= -f2)"
 
 echo "== 3/5. Сертификат https =="

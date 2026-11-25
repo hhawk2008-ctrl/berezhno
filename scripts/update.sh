@@ -5,8 +5,20 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-echo "== Забираю новую версию =="
-git pull --ff-only
+# Сначала забираем новую версию, потом запускаем уже обновлённый скрипт:
+# так изменения в самом update.sh применяются сразу.
+if [ "${1:-}" != "--pulled" ]; then
+  echo "== Забираю новую версию =="
+  git pull --ff-only
+  exec bash scripts/update.sh --pulled
+fi
+
+# Секретный ключ для входа: если его нет в .env, придумываем.
+if ! grep -q '^SECRET_KEY=.' .env; then
+  sed -i '/^SECRET_KEY=/d' .env
+  echo "SECRET_KEY=$(openssl rand -hex 32)" >> .env
+  echo "Секретный ключ для входа добавлен в .env."
+fi
 
 echo "== Пересобираю и перезапускаю =="
 sudo docker compose up -d --build
