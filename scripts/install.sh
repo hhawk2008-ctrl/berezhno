@@ -10,9 +10,9 @@ sudo apt-get update -y
 sudo apt-get install -y docker.io docker-compose-v2 git openssl curl
 sudo systemctl enable --now docker
 
-# Зеркало Docker Hub: если основной сервер недоступен, образы скачаются с зеркала.
-if [ ! -f /etc/docker/daemon.json ]; then
-  echo '{ "registry-mirrors": ["https://mirror.gcr.io"] }' | sudo tee /etc/docker/daemon.json >/dev/null
+# Зеркало Docker Hub в России (Timeweb): из Yandex Cloud Docker Hub и зеркало Google не отвечают.
+if [ ! -f /etc/docker/daemon.json ] || grep -q "mirror.gcr.io" /etc/docker/daemon.json; then
+  echo '{ "registry-mirrors": ["https://dockerhub.timeweb.cloud"] }' | sudo tee /etc/docker/daemon.json >/dev/null
   sudo systemctl restart docker
 fi
 
